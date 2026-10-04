@@ -1,39 +1,47 @@
 class Solution {
     public int[] searchRange(int[] nums, int target) {
         int n = nums.length;
-        int first = -1;
-        int last = -1;
+        int start = 0;
+        int end = n-1;
+        int ans = -1;
 
-        // 1. Find First Occurrence
-        int start = 0, end = n - 1;
-        while (start <= end) {
-            int mid = start + (end - start) / 2;
-            if (nums[mid] >= target) {
-                if (nums[mid] == target) first = mid;
-                end = mid - 1; // Try left side
-            } else {
+
+        if(n == 0){
+            return new int[]{-1,-1};
+        }
+        // lower bound = first occurence of the element 
+        while(start<=end){
+            int mid = (start+end)/2;
+
+            if(nums[mid] >= target){
+                ans = mid;
+                end = mid - 1;
+            }
+            else{
                 start = mid + 1;
             }
         }
-
-        // Agar target mila hi nahi, toh simple [-1, -1] return kar do
-        if (first == -1) {
-            return new int[]{-1, -1};
+        if( ans == -1 ||nums[ans] != target ){
+            return new int[]{-1,-1};
         }
 
-        // 2. Find Last Occurrence (Reset Pointers!)
-        start = 0; 
-        end = n - 1;
-        while (start <= end) {
-            int mid = start + (end - start) / 2;
-            if (nums[mid] <= target) {
-                if (nums[mid] == target) last = mid;
-                start = mid + 1; // Try right side
-            } else {
-                end = mid - 1;
+        // for upper bound --and jb hm return kenge toh upperbound -1 value retur krdenge 
+        int start2 = 0;
+        int end2 = n-1;
+        int ans2 = n;
+
+        while(start2<=end2){
+            int mid2 =(start2 + end2)/2;
+
+            if(nums[mid2] > target){
+                ans2 = mid2;
+                end2 = mid2 - 1;
             }
-        }
+            else{
+                start2 = mid2 + 1;
+            }
 
-        return new int[]{first, last};
+        }
+        return new int[]{ans , ans2 -1  };
     }
 }
